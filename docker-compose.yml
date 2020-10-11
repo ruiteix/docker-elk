@@ -1,4 +1,4 @@
-version: '3.2'
+version: "3.2"
 
 services:
   elasticsearch:
@@ -68,9 +68,39 @@ services:
     depends_on:
       - elasticsearch
 
+  filebeat:
+    user: root # for docker socket
+    build:
+      context: filebeat/
+      args:
+        ELK_VERSION: $ELK_VERSION
+    volumes:
+      - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      # - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      #- /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./filebeat/modules.d/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
+      - nginx_logs:/var/log/nginx:ro
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+      - nginx
+    command: filebeat -e -strict.perms=false
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "8080:80"
+    networks:
+      - elk
+    volumes:
+      - nginx_logs:/var/log/nginx
+
 networks:
   elk:
     driver: bridge
 
 volumes:
   elasticsearch:
+  nginx_logs:
