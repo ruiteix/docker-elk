@@ -8,6 +8,13 @@ filebeat.inputs:
     enabled: true
     paths:
       - /var/log/nginx/access.log*
+    exclude_lines: ["curl"]
+    exclude_files: [".gz$"]
+    ignore_older: 24h
+    tags: ["back"]
+    fields:
+      env: prod
+      owner: rui
 
 # filebeat.autodiscover:
 #   providers:
