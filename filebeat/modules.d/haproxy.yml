@@ -1,0 +1,59 @@
+# Module: haproxy
+# Docs: https://www.elastic.co/guide/en/beats/filebeat/7.9/filebeat-module-haproxy.html
+
+- module: haproxy
+  log:
+    enabled: true
+    var.paths: ["/var/log/haproxy/access.log"]
+    var.input: "file"
+    input:
+      processors:
+        - add_tags:
+            tags: [test, toto]
+        # - drop_fields:
+        #     fields: ["source.ip"]
+        # - drop_fields:
+        #     fields: ["haproxy.http.request.captured_headers"]
+        # - dissect:
+        #     tokenizer: "%{key1} %{key2} %{key3|convert_datatype}"
+        #     field: "message"
+        #     target_prefix: "dissect"
+        # - rename:
+        #     fields:
+        #       - from: "haproxy.bytes_read"
+        #         to: "haproxy.bytes_read_renamed"
+
+        # - module: haproxy
+        # log:
+        #   enabled: true
+        #   var.input: "file"
+        #   var.paths: ["/var/log/haproxy.log"]
+        #   var.convert_timezone: true
+
+        #   input:
+        #     processors:
+
+        #     - decode_csv_fields:
+        #         fields:
+        #           message: decoded.csv
+        #         separator: ":"
+        #         ignore_missing: false
+        #         overwrite_keys: true
+        #         trim_leading_space: true
+        #         fail_on_error: false
+
+        #     - extract_array:
+        #         field: decoded.csv
+        #         mappings:
+        #           client.ip: 3
+
+        #     - add_fields:
+        #         when:
+        #           network:
+        #             client.ip: '10.0.9.0/24'
+        #         fields:
+        #           source.site: VPN Network
+        #         target: ''
+
+        #     - drop_fields:
+        #         fields: ['decoded.csv', 'client.ip']

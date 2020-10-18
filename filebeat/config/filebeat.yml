@@ -3,32 +3,41 @@ filebeat.config:
     path: ${path.config}/modules.d/*.yml
     reload.enabled: false
 
-filebeat.inputs:
-  - type: log
-    enabled: true
-    paths:
-      - /var/log/nginx/access.log*
-    exclude_lines: ["curl"]
-    exclude_files: [".gz$"]
-    ignore_older: 24h
-    tags: ["back"]
-    fields:
-      env: prod
-      owner: rui
+# logging.level: debug
+# filebeat.inputs:
+#   - type: log
+#     enabled: true
+#     paths:
+#       - /var/log/haproxy/access.log
+#     ignore_older: 24h
+#     tags: ["back"]
+#     fields:
+#       env: prod
+#       owner: rui
 
 # filebeat.autodiscover:
 #   providers:
 #     - type: docker
 #       hints.enabled: true
 
-processors:
-  - add_cloud_metadata: ~
+# processors:
+#   - drop_fields:
+#       fields: ["haproxy.http.request.captured_headers"]
+# processors:
+#   - drop_fields:
+#       fields: ["message", "haproxy.bytes_read"]
+#       ignore_missing: true
+#   - add_cloud_metadata: ~
+#   - dissect:
+#       tokenizer: "%{key1} %{key2} %{key3|convert_datatype}"
+#       field: "message"
+#       target_prefix: "dissect"
 
-# output.elasticsearch:
-#   hosts: "elasticsearch:9200"
+output.elasticsearch:
+  hosts: "elasticsearch:9200"
 
-output.logstash:
-  hosts: "logstash:5044"
+# output.logstash:
+#   hosts: "logstash:5044"
 
 setup.kibana:
   host: "kibana:5601"

@@ -13,4 +13,4 @@ init-kibana:
 		-H 'kbn-version: 7.9.2' \
 		-d '{"attributes":{"title":"nginx-*","timeFieldName":"@timestamp"}}'
 init-filebeat: ## Init kibana/elasticsearch
-	docker-compose run filebeat filebeat -e -strict.perms=false setup
+	docker-compose exec filebeat filebeat -e -strict.perms=false setup

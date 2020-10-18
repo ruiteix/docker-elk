@@ -80,8 +80,12 @@ services:
       - ./filebeat/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       # - /var/lib/docker/containers:/var/lib/docker/containers:ro
       # - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - ./filebeat/modules.d/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
+      # - ./filebeat/modules.d/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
+      - ./filebeat/modules.d/haproxy.yml:/usr/share/filebeat/modules.d/haproxy.yml:ro
       - nginx_logs:/var/log/nginx:ro
+      - haproxy_logs:/var/log/haproxy:ro
+      #- ./filebeat/haproxy.log:/var/log/haproxy/access.log:ro
+      - ./filebeat/config/module/haproxy/pipeline.yml:/usr/share/filebeat/module/haproxy/log/ingest/pipeline.yml
     networks:
       - elk
     depends_on:
@@ -90,14 +94,30 @@ services:
     command: filebeat -e -strict.perms=false
 
   nginx:
-    build:
-      context: ./nginx
+    build: ./nginx
     ports:
-      - "8080:80"
+      - 8080:80
     networks:
       - elk
     volumes:
       - nginx_logs:/var/log/nginx
+
+  haproxy:
+    image: haproxy
+    volumes:
+      - ./haproxy/config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - 80:80
+    networks:
+      - elk
+
+  rsyslog:
+    image: jumanjiman/rsyslog
+    volumes:
+      - ./rsyslog/rsyslog.d/haproxy.conf:/etc/rsyslog.d/haproxy.conf:ro
+      - haproxy_logs:/var/log/haproxy
+    networks:
+      - elk
 
 networks:
   elk:
@@ -106,3 +126,4 @@ networks:
 volumes:
   elasticsearch:
   nginx_logs:
+  haproxy_logs:
