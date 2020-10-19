@@ -1,19 +1,19 @@
 filebeat.config:
-  modules:
-    path: ${path.config}/modules.d/*.yml
-    reload.enabled: false
+  # modules:
+  #   path: ${path.config}/modules.d/*.yml
+  #   reload.enabled: false
 
 # logging.level: debug
-# filebeat.inputs:
-#   - type: log
-#     enabled: true
-#     paths:
-#       - /var/log/haproxy/access.log
-#     ignore_older: 24h
-#     tags: ["back"]
-#     fields:
-#       env: prod
-#       owner: rui
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/haproxy/access.log
+    ignore_older: 24h
+    # tags: ["back"]
+    # fields:
+    #   env: prod
+    #   owner: rui
 
 # filebeat.autodiscover:
 #   providers:
@@ -33,11 +33,11 @@ filebeat.config:
 #       field: "message"
 #       target_prefix: "dissect"
 
-output.elasticsearch:
-  hosts: "elasticsearch:9200"
+# output.elasticsearch:
+#   hosts: "elasticsearch:9200"
 
-# output.logstash:
-#   hosts: "logstash:5044"
+output.logstash:
+  hosts: "logstash:5044"
 
 setup.kibana:
   host: "kibana:5601"

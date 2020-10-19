@@ -81,7 +81,7 @@ services:
       # - /var/lib/docker/containers:/var/lib/docker/containers:ro
       # - /var/run/docker.sock:/var/run/docker.sock:ro
       # - ./filebeat/modules.d/nginx.yml:/usr/share/filebeat/modules.d/nginx.yml:ro
-      - ./filebeat/modules.d/haproxy.yml:/usr/share/filebeat/modules.d/haproxy.yml:ro
+      # - ./filebeat/modules.d/haproxy.yml:/usr/share/filebeat/modules.d/haproxy.yml:ro
       - nginx_logs:/var/log/nginx:ro
       - haproxy_logs:/var/log/haproxy:ro
       #- ./filebeat/haproxy.log:/var/log/haproxy/access.log:ro
