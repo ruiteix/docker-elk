@@ -11,8 +11,6 @@
         - add_tags:
             tags: [test, toto]
         # - drop_fields:
-        #     fields: ["source.ip"]
-        # - drop_fields:
         #     fields: ["haproxy.http.request.captured_headers"]
         # - dissect:
         #     tokenizer: "%{key1} %{key2} %{key3|convert_datatype}"
